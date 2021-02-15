@@ -4,26 +4,55 @@ import './Grid.css';
 
 function Grid(props) {
     function squareClicked(divID) {
+        //check if it is the user's turn
         if (props.currentPlayer == false) {
             alert("Sorry, this is not your turn. 😥");
         } else {
-            //the user is the cross, which is the value 1
-            let stateCopy = props.grid;
+            let stateCopy = { ...props.grid };
             const keys = Object.keys(stateCopy);
-            console.log(keys);
             const values = Object.values(stateCopy);
             const searchedKey = keys.indexOf(divID);
-            console.log(searchedKey)
             const searchedValue = values[searchedKey];
+            //check if the user clicked on an empty square
             if (searchedValue > 0) {
                 alert("Sorry, there is already something in this place. Please click again. 🤔");
             } else {
-                //console.log(searchedKey);
-                //console.log(stateCopy[searchedKey]);
-                stateCopy.(keys.indexOf(divID)) = 1;
-                //console.log(stateCopy[searchedKey]);
+                //the user is the cross, which is the value 1
+                switch (keys[searchedKey]) {
+                    case "A1":
+                        stateCopy.A1 = 1;
+                      break;
+                    case 'A2':
+                        stateCopy.A2 = 1;
+                      break;
+                    case 'A3':
+                        stateCopy.A3 = 1;
+                      break;
+                    case 'B1':
+                        stateCopy.B1 = 1;
+                      break;
+                    case 'B2':
+                        stateCopy.B2 = 1;
+                      break;
+                    case 'B3':
+                        stateCopy.B3 = 1;
+                      break;
+                    case 'C1':
+                        stateCopy.C1 = 1;
+                      break;
+                    case 'C2':
+                        stateCopy.C2 = 1;
+                      break;
+                    case 'C3':
+                        stateCopy.C3 = 1;
+                      break;
+                    default:
+                        console.log("I think there is a problem.");
+                  }
+                //the user can click on a square and a cross will appear if its his turn
+                console.log(props.grid);
                 props.click(stateCopy);
-                console.log(stateCopy)
+                console.log(props.grid);
             }
         }
     }
