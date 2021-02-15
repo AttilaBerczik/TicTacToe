@@ -4,7 +4,6 @@ import circle from '../../images/circle.svg';
 import './Cell.css';
 
 function Cell(props) {
-
     function convertImage () {
         const keys = Object.keys(props.state);
         const values = Object.values(props.state);

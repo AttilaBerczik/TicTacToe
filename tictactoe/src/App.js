@@ -29,7 +29,7 @@ function App() {
               </div>
               <div className="col-xl-7">
                 Tic-tac-toe
-                <Grid grid={grid} click={setGrid} currentPlayer={currentPlayer} setCurrentPlayer={setCurrentPlayer}/>
+                <Grid grid={grid} click={setGrid} currentPlayer={currentPlayer} setCurrentPlayer={setCurrentPlayer} machineTurn={logic}/>
               </div>
               <div className="col col-lg-2">
                   

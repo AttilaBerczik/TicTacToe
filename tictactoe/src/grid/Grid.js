@@ -50,9 +50,10 @@ function Grid(props) {
                         console.log("I think there is a problem.");
                   }
                 //the user can click on a square and a cross will appear if its his turn
-                console.log(props.grid);
                 props.click(stateCopy);
-                console.log(props.grid);
+                props.setCurrentPlayer(false);
+                //the next turn is for the machine
+                props.machineTurn(stateCopy, props.click, props.setCurrentPlayer);
             }
         }
     }
