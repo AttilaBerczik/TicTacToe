@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Cell from "./cell/Cell";
 import "./Grid.css";
+import LineTo from "react-lineto";
 
 function Grid(props) {
     function squareClicked(divID) {
@@ -97,15 +98,15 @@ function Grid(props) {
             <table className="table table-bordered grid-table">
                 <thead>
                     <tr>
-                        <td onClick={() => squareClicked("A1")}>
+                        <td onClick={() => squareClicked("A1")} className="A1">
                             <Cell ID="A1" state={props.grid} />
                             {squareVisible("A1")}
                         </td>
-                        <td onClick={() => squareClicked("A2")}>
+                        <td onClick={() => squareClicked("A2")} className="A2">
                             <Cell ID="A2" state={props.grid} />
                             {squareVisible("A2")}
                         </td>
-                        <td onClick={() => squareClicked("A3")}>
+                        <td onClick={() => squareClicked("A3")} className="A3">
                             <Cell ID="A3" state={props.grid} />
                             {squareVisible("A3")}
                         </td>
@@ -113,35 +114,38 @@ function Grid(props) {
                 </thead>
                 <tbody>
                     <tr>
-                        <td onClick={() => squareClicked("B1")}>
+                        <td onClick={() => squareClicked("B1")} className="B1">
                             <Cell ID="B1" state={props.grid} />
                             {squareVisible("B1")}
                         </td>
-                        <td onClick={() => squareClicked("B2")}>
+                        <td onClick={() => squareClicked("B2")} className="B2">
                             <Cell ID="B2" state={props.grid} />
                             {squareVisible("B2")}
                         </td>
-                        <td onClick={() => squareClicked("B3")}>
+                        <td onClick={() => squareClicked("B3")} className="B3">
                             <Cell ID="B3" state={props.grid} />
                             {squareVisible("B3")}
                         </td>
                     </tr>
                     <tr>
-                        <td onClick={() => squareClicked("C1")}>
+                        <td onClick={() => squareClicked("C1")} className="C1">
                             <Cell ID="C1" state={props.grid} />
                             {squareVisible("C1")}
                         </td>
-                        <td onClick={() => squareClicked("C2")}>
+                        <td onClick={() => squareClicked("C2")} className="C2">
                             <Cell ID="C2" state={props.grid} />
                             {squareVisible("C2")}
                         </td>
-                        <td onClick={() => squareClicked("C3")}>
+                        <td onClick={() => squareClicked("C3")} className="C3">
                             <Cell ID="C3" state={props.grid} />
                             {squareVisible("C3")}
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <div>
+                <LineTo from="A3" to="B3" borderWidth="21px" borderColor="white"/>
+            </div>
         </>
     );
 }
