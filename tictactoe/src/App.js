@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import "./App.css";
 import Grid from "./grid/Grid";
-import logic from "./logic/Logic";
-import checkIfGameEnds from "./logic/CheckIfGameEnds";
 
-function App() {
+
+const App = () => {
     const [grid, setGrid] = useState({
         //0 is nothing, 1 cross and 2 circle
         A1: 0,
@@ -20,6 +19,7 @@ function App() {
         C3: 0,
     });
     const [currentPlayer, setCurrentPlayer] = useState(true); //true is the player, false is the machine
+    const [line, setLine] = useState([false]);
     return (
         <div className="App">
             <header className="App-header">
@@ -33,8 +33,8 @@ function App() {
                                 click={setGrid}
                                 currentPlayer={currentPlayer}
                                 setCurrentPlayer={setCurrentPlayer}
-                                machineTurn={logic}
-                                checkIfGameEnds={checkIfGameEnds}
+                                line={line}
+                                setLine={setLine}
                             />
                         </div>
                         <div className="col col-lg-2"></div>
@@ -43,5 +43,5 @@ function App() {
             </header>
         </div>
     );
-}
+};
 export default App;

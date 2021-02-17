@@ -2,11 +2,43 @@ import React, { Component } from "react";
 import Cell from "./cell/Cell";
 import "./Grid.css";
 import LineTo from "react-lineto";
+import checkIfGameEnds from "../logic/CheckIfGameEnds";
 
-function Grid(props) {
-    function squareClicked(divID) {
+const Grid = (props) => {
+    const lineVisible = () => {
+        //this makes the line visible over the solution, once we've got a solution
+        if (props.line[0]) {
+            return (
+                <LineTo
+                    from={props.line[1]}
+                    to={props.line[2]}
+                    borderWidth="21px"
+                    borderColor="white"
+                />
+            );
+        } else {
+            return <></>;
+        }
+    };
+
+    const squareVisible = (cellID) => {
+        //makes the square invisible if there is a circle or cross, so we keep the nice table form
+        const keys = Object.keys(props.grid);
+        const values = Object.values(props.grid);
+        const searchedKey = keys.indexOf(cellID);
+        const searchedValue = values[searchedKey];
+        if (searchedValue == 0) {
+            return <div></div>;
+        } else if (searchedValue == 1 || searchedValue == 2) {
+            return <></>;
+        }
+    };
+
+    const squareClicked = (divID) => {
+        //this gets activated when the user clicks a square
+        //it makes the cross appear and starts the computer's turn
         //check if the game is over
-        if (props.checkIfGameEnds(props.grid) == 0) {
+        if (checkIfGameEnds(props.grid) == 0) {
             //check if it is the user's turn
             if (props.currentPlayer == false) {
                 alert("Sorry, this is not your turn. 😥");
@@ -16,6 +48,9 @@ function Grid(props) {
                 const values = Object.values(stateCopy);
                 const searchedKey = keys.indexOf(divID);
                 const searchedValue = values[searchedKey];
+                const drawLine = (start, finish) => {
+                    props.setLine([true, start, finish]);
+                };
                 //check if the user clicked on an empty square
                 if (searchedValue > 0) {
                     alert(
@@ -57,42 +92,126 @@ function Grid(props) {
                     //the user can click on a square and a cross will appear if its his turn
                     props.click(stateCopy);
                     //check if game ends
-                    const whoWon = props.checkIfGameEnds(stateCopy);
-                    const one = 1;
-                    console.log(whoWon);
-                    if (whoWon == one) {
-                        setTimeout(() => {
-                            alert("You won!");
-                        }, 1);
-                    } else if (whoWon == 2) {
-                        setTimeout(() => {
-                            alert("You lost!");
-                        }, 1);
-                    } else if (whoWon == 0) {
+                    if (checkIfGameEnds(stateCopy) != 0) {
+                        const whoWon = checkIfGameEnds(stateCopy)[0];
+                        if (whoWon == 1) {
+                            drawLine(
+                                checkIfGameEnds(stateCopy)[1],
+                                checkIfGameEnds(stateCopy)[2]
+                            );
+                            setTimeout(() => {
+                                alert("You won!");
+                            }, 1);
+                        } else if (whoWon == 2) {
+                            drawLine(
+                                checkIfGameEnds(stateCopy)[1],
+                                checkIfGameEnds(stateCopy)[2]
+                            );
+                            setTimeout(() => {
+                                alert("You lost!");
+                            }, 1);
+                        }
+                    } else {
                         //it's the computer's turn
                         props.setCurrentPlayer(false);
                         //the next turn is for the machine
-                        props.machineTurn(
-                            stateCopy,
-                            props.click,
-                            props.setCurrentPlayer
-                        );
+                        logic(stateCopy);
                     }
                 }
             }
         }
-    }
-    function squareVisible(cellID) {
-        const keys = Object.keys(props.grid);
-        const values = Object.values(props.grid);
-        const searchedKey = keys.indexOf(cellID);
-        const searchedValue = values[searchedKey];
-        if (searchedValue == 0) {
-            return <div></div>;
-        } else if (searchedValue == 1 || searchedValue == 2) {
-            return <></>;
+    };
+
+    const logic = (state) => {
+        //these are the calculations for the computer, it randomly puts a circle in an empty square
+        //check if the game is over
+        if (checkIfGameEnds(state) == 0) {
+            let gridCopy = { ...state };
+            function getRandomInt(max) {
+                return Math.floor(Math.random() * Math.floor(max));
+            }
+            let nextTurn = getRandomInt(8);
+            const keys = Object.keys(gridCopy);
+            const values = Object.values(gridCopy);
+            if (values[nextTurn] != 0) {
+                //check if there are empty places left
+                let numberOfEmptyPlaces = 0;
+                for (var i = 0; i < values.length; i++) {
+                    if (values[i] == 0) {
+                        numberOfEmptyPlaces = numberOfEmptyPlaces + 1;
+                    }
+                }
+                if (numberOfEmptyPlaces < 1) {
+                    setTimeout(() => {
+                        alert("Game over! The result is draw. 🎉");
+                    }, 1);
+                } else {
+                    logic(gridCopy);
+                }
+            } else {
+                //the machine is the circle, which is the value 2
+                switch (keys[nextTurn]) {
+                    case "A1":
+                        gridCopy.A1 = 2;
+                        break;
+                    case "A2":
+                        gridCopy.A2 = 2;
+                        break;
+                    case "A3":
+                        gridCopy.A3 = 2;
+                        break;
+                    case "B1":
+                        gridCopy.B1 = 2;
+                        break;
+                    case "B2":
+                        gridCopy.B2 = 2;
+                        break;
+                    case "B3":
+                        gridCopy.B3 = 2;
+                        break;
+                    case "C1":
+                        gridCopy.C1 = 2;
+                        break;
+                    case "C2":
+                        gridCopy.C2 = 2;
+                        break;
+                    case "C3":
+                        gridCopy.C3 = 2;
+                        break;
+                    default:
+                        console.log("I think there is a problem.");
+                }
+                props.click(gridCopy);
+                //check if game ends
+                if (checkIfGameEnds(gridCopy) != 0) {
+                    const whoWon = checkIfGameEnds(gridCopy)[0];
+                    if (whoWon == 1) {
+                        props.setLine([
+                            true,
+                            checkIfGameEnds(gridCopy)[1],
+                            checkIfGameEnds(gridCopy)[2],
+                        ]);
+                        setTimeout(() => {
+                            alert("You won!");
+                        }, 1);
+                    } else if (whoWon == 2) {
+                        props.setLine([
+                            true,
+                            checkIfGameEnds(gridCopy)[1],
+                            checkIfGameEnds(gridCopy)[2],
+                        ]);
+                        setTimeout(() => {
+                            alert("You lost!");
+                        }, 1);
+                    }
+                } else {
+                    //the next turn is for the player
+                    props.setCurrentPlayer(true);
+                }
+            }
         }
-    }
+    };
+
     return (
         <>
             <table className="table table-bordered grid-table">
@@ -143,11 +262,9 @@ function Grid(props) {
                     </tr>
                 </tbody>
             </table>
-            <div>
-                <LineTo from="A3" to="B3" borderWidth="21px" borderColor="white"/>
-            </div>
+            {lineVisible()}
         </>
     );
-}
+};
 
 export default Grid;

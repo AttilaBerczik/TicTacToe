@@ -1,6 +1,7 @@
-import React from "react";
+import React, { Component } from "react";
 
 const CheckIfGameEnds = (grid) => {
+    //this is the algorithm for figuring out if someone won, and if yes, who
     const values = Object.values(grid);
     const compareSums = (sum) => {
         if (sum == 3) {
