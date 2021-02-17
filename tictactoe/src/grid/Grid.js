@@ -12,8 +12,8 @@ const Grid = (props) => {
                 <LineTo
                     from={props.line[1]}
                     to={props.line[2]}
-                    borderWidth="21px"
-                    borderColor="white"
+                    borderWidth="4px"
+                    borderColor="#dee2e6"
                 />
             );
         } else {
@@ -99,6 +99,12 @@ const Grid = (props) => {
                                 checkIfGameEnds(stateCopy)[1],
                                 checkIfGameEnds(stateCopy)[2]
                             );
+                            //update the score counter
+                            const newScore = props.score[0] + 1;
+                            let scoreCopy = props.score;
+                            scoreCopy[0] = newScore;
+                            props.setScore(scoreCopy);
+                            //notify the user
                             setTimeout(() => {
                                 alert("You won!");
                             }, 1);
@@ -107,6 +113,12 @@ const Grid = (props) => {
                                 checkIfGameEnds(stateCopy)[1],
                                 checkIfGameEnds(stateCopy)[2]
                             );
+                            //update the score counter
+                            const newScore = props.score[2] + 1;
+                            let scoreCopy = props.score;
+                            scoreCopy[2] = newScore;
+                            props.setScore(scoreCopy);
+                            //notify the user
                             setTimeout(() => {
                                 alert("You lost!");
                             }, 1);
@@ -142,6 +154,12 @@ const Grid = (props) => {
                     }
                 }
                 if (numberOfEmptyPlaces < 1) {
+                    //update the score counter
+                    const newScore = props.score[1] + 1;
+                    let scoreCopy = props.score;
+                    scoreCopy[1] = newScore;
+                    props.setScore(scoreCopy);
+                    //notify the user
                     setTimeout(() => {
                         alert("Game over! The result is draw. 🎉");
                     }, 1);
@@ -191,6 +209,12 @@ const Grid = (props) => {
                             checkIfGameEnds(gridCopy)[1],
                             checkIfGameEnds(gridCopy)[2],
                         ]);
+                        //update the score counter
+                        const newScore = props.score[2] + 1;
+                        let scoreCopy = props.score;
+                        scoreCopy[2] = newScore;
+                        props.setScore(scoreCopy);
+                        //notify the user
                         setTimeout(() => {
                             alert("You won!");
                         }, 1);
@@ -200,6 +224,12 @@ const Grid = (props) => {
                             checkIfGameEnds(gridCopy)[1],
                             checkIfGameEnds(gridCopy)[2],
                         ]);
+                        //update the score counter
+                        const newScore = props.score[2] + 1;
+                        let scoreCopy = props.score;
+                        scoreCopy[2] = newScore;
+                        props.setScore(scoreCopy);
+                        //notify the user
                         setTimeout(() => {
                             alert("You lost!");
                         }, 1);
@@ -212,27 +242,10 @@ const Grid = (props) => {
         }
     };
 
-    const startAgain = () => {
-        //resets all states to restart the game
-        props.click({
-            A1: 0,
-            A2: 0,
-            A3: 0,
-            B1: 0,
-            B2: 0,
-            B3: 0,
-            C1: 0,
-            C2: 0,
-            C3: 0,
-        });
-        props.setLine([false]);
-        props.setCurrentPlayer(true);
-    }
-
     return (
         <>
             <table className="table table-bordered grid-table">
-                <thead>
+                <tbody>
                     <tr>
                         <td onClick={() => squareClicked("A1")} className="A1">
                             <Cell ID="A1" state={props.grid} />
@@ -247,8 +260,7 @@ const Grid = (props) => {
                             {squareVisible("A3")}
                         </td>
                     </tr>
-                </thead>
-                <tbody>
+
                     <tr>
                         <td onClick={() => squareClicked("B1")} className="B1">
                             <Cell ID="B1" state={props.grid} />
@@ -280,7 +292,6 @@ const Grid = (props) => {
                 </tbody>
             </table>
             {lineVisible()}
-            <button type="button" onClick={() => startAgain()} className="btn btn-outline-primary btn-lg">Restart game</button>
         </>
     );
 };

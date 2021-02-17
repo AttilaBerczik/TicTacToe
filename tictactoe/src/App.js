@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./App.css";
 import Grid from "./grid/Grid";
-
+import RestartButton from "./restartButton/RestartButton";
+import Score from './score/Score';
 
 const App = () => {
     const [grid, setGrid] = useState({
@@ -20,6 +21,7 @@ const App = () => {
     });
     const [currentPlayer, setCurrentPlayer] = useState(true); //true is the player, false is the machine
     const [line, setLine] = useState([false]);
+    const [score, setScore] = useState([0, 0, 0]);
     return (
         <div className="App">
             <header className="App-header">
@@ -27,7 +29,7 @@ const App = () => {
                     <div className="row justify-content-center">
                         <div className="col col-lg-2"></div>
                         <div className="col-xl-7">
-                            Tic-tac-toe
+                            <p className="h1">Tic-tac-toe</p>
                             <Grid
                                 grid={grid}
                                 click={setGrid}
@@ -35,7 +37,15 @@ const App = () => {
                                 setCurrentPlayer={setCurrentPlayer}
                                 line={line}
                                 setLine={setLine}
+                                score={score}
+                                setScore={setScore}
                             />
+                            <RestartButton
+                                setGrid={setGrid}
+                                setLine={setLine}
+                                setCurrentPlayer={setCurrentPlayer}
+                            />
+                            <Score score={score}/>
                         </div>
                         <div className="col col-lg-2"></div>
                     </div>
