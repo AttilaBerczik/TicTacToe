@@ -16,6 +16,7 @@ const RestartButton = (props) => {
         });
         props.setLine([false]);
         props.setCurrentPlayer(true);
+        props.setDraw(false);
     };
     return (
         <>

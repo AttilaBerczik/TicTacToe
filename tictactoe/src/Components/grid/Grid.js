@@ -2,9 +2,26 @@ import React, { Component } from "react";
 import Cell from "./cell/Cell";
 import "./Grid.css";
 import LineTo from "react-lineto";
-import checkIfGameEnds from "../logic/CheckIfGameEnds";
+import checkIfGameEnds from "../../logic/CheckIfGameEnds";
 
 const Grid = (props) => {
+    const restartGame = () => {
+        //function that restarts the whole game, except the scores
+        props.click({
+            A1: 0,
+            A2: 0,
+            A3: 0,
+            B1: 0,
+            B2: 0,
+            B3: 0,
+            C1: 0,
+            C2: 0,
+            C3: 0,
+        });
+        props.setLine([false]);
+        props.setCurrentPlayer(true);
+        props.setDraw(false);
+    };
     const lineVisible = () => {
         //this makes the line visible over the solution, once we've got a solution
         if (props.line[0]) {
@@ -37,99 +54,107 @@ const Grid = (props) => {
     const squareClicked = (divID) => {
         //this gets activated when the user clicks a square
         //it makes the cross appear and starts the computer's turn
-        //check if the game is over
-        if (checkIfGameEnds(props.grid) == 0) {
-            //check if it is the user's turn
-            if (props.currentPlayer == false) {
-                alert("Sorry, this is not your turn. 😥");
-            } else {
-                let stateCopy = { ...props.grid };
-                const keys = Object.keys(stateCopy);
-                const values = Object.values(stateCopy);
-                const searchedKey = keys.indexOf(divID);
-                const searchedValue = values[searchedKey];
-                const drawLine = (start, finish) => {
-                    props.setLine([true, start, finish]);
-                };
-                //check if the user clicked on an empty square
-                if (searchedValue > 0) {
-                    alert(
-                        "Sorry, there is already something in this place. Please click again. 🤔"
-                    );
+        //if the result is draw and there are no more empty places left, and the user clicks on a square the game restarts
+        if (props.draw) {
+            restartGame();
+        } else {
+            //check if the game is over
+            if (checkIfGameEnds(props.grid) == 0) {
+                //check if it is the user's turn
+                if (props.currentPlayer == false) {
+                    alert("Sorry, this is not your turn. 😥");
                 } else {
-                    //the user is the cross, which is the value 1
-                    switch (keys[searchedKey]) {
-                        case "A1":
-                            stateCopy.A1 = 1;
-                            break;
-                        case "A2":
-                            stateCopy.A2 = 1;
-                            break;
-                        case "A3":
-                            stateCopy.A3 = 1;
-                            break;
-                        case "B1":
-                            stateCopy.B1 = 1;
-                            break;
-                        case "B2":
-                            stateCopy.B2 = 1;
-                            break;
-                        case "B3":
-                            stateCopy.B3 = 1;
-                            break;
-                        case "C1":
-                            stateCopy.C1 = 1;
-                            break;
-                        case "C2":
-                            stateCopy.C2 = 1;
-                            break;
-                        case "C3":
-                            stateCopy.C3 = 1;
-                            break;
-                        default:
-                            console.log("I think there is a problem.");
-                    }
-                    //the user can click on a square and a cross will appear if its his turn
-                    props.click(stateCopy);
-                    //check if game ends
-                    if (checkIfGameEnds(stateCopy) != 0) {
-                        const whoWon = checkIfGameEnds(stateCopy)[0];
-                        if (whoWon == 1) {
-                            drawLine(
-                                checkIfGameEnds(stateCopy)[1],
-                                checkIfGameEnds(stateCopy)[2]
-                            );
-                            //update the score counter
-                            const newScore = props.score[0] + 1;
-                            let scoreCopy = props.score;
-                            scoreCopy[0] = newScore;
-                            props.setScore(scoreCopy);
-                            //notify the user
-                            setTimeout(() => {
-                                alert("You won!");
-                            }, 1);
-                        } else if (whoWon == 2) {
-                            drawLine(
-                                checkIfGameEnds(stateCopy)[1],
-                                checkIfGameEnds(stateCopy)[2]
-                            );
-                            //update the score counter
-                            const newScore = props.score[2] + 1;
-                            let scoreCopy = props.score;
-                            scoreCopy[2] = newScore;
-                            props.setScore(scoreCopy);
-                            //notify the user
-                            setTimeout(() => {
-                                alert("You lost!");
-                            }, 1);
-                        }
+                    let stateCopy = { ...props.grid };
+                    const keys = Object.keys(stateCopy);
+                    const values = Object.values(stateCopy);
+                    const searchedKey = keys.indexOf(divID);
+                    const searchedValue = values[searchedKey];
+                    const drawLine = (start, finish) => {
+                        props.setLine([true, start, finish]);
+                    };
+                    //check if the user clicked on an empty square
+                    if (searchedValue > 0) {
+                        alert(
+                            "Sorry, there is already something in this place. Please click again. 🤔"
+                        );
                     } else {
-                        //it's the computer's turn
-                        props.setCurrentPlayer(false);
-                        //the next turn is for the machine
-                        logic(stateCopy);
+                        //the user is the cross, which is the value 1
+                        switch (keys[searchedKey]) {
+                            case "A1":
+                                stateCopy.A1 = 1;
+                                break;
+                            case "A2":
+                                stateCopy.A2 = 1;
+                                break;
+                            case "A3":
+                                stateCopy.A3 = 1;
+                                break;
+                            case "B1":
+                                stateCopy.B1 = 1;
+                                break;
+                            case "B2":
+                                stateCopy.B2 = 1;
+                                break;
+                            case "B3":
+                                stateCopy.B3 = 1;
+                                break;
+                            case "C1":
+                                stateCopy.C1 = 1;
+                                break;
+                            case "C2":
+                                stateCopy.C2 = 1;
+                                break;
+                            case "C3":
+                                stateCopy.C3 = 1;
+                                break;
+                            default:
+                                console.log("I think there is a problem.");
+                        }
+                        //the user can click on a square and a cross will appear if its his turn
+                        props.click(stateCopy);
+                        //check if game ends
+                        if (checkIfGameEnds(stateCopy) != 0) {
+                            const whoWon = checkIfGameEnds(stateCopy)[0];
+                            if (whoWon == 1) {
+                                drawLine(
+                                    checkIfGameEnds(stateCopy)[1],
+                                    checkIfGameEnds(stateCopy)[2]
+                                );
+                                //update the score counter
+                                const newScore = props.score[0] + 1;
+                                let scoreCopy = props.score;
+                                scoreCopy[0] = newScore;
+                                props.setScore(scoreCopy);
+                                //notify the user
+                                setTimeout(() => {
+                                    alert("You won!");
+                                }, 1);
+                            } else if (whoWon == 2) {
+                                drawLine(
+                                    checkIfGameEnds(stateCopy)[1],
+                                    checkIfGameEnds(stateCopy)[2]
+                                );
+                                //update the score counter
+                                const newScore = props.score[2] + 1;
+                                let scoreCopy = props.score;
+                                scoreCopy[2] = newScore;
+                                props.setScore(scoreCopy);
+                                //notify the user
+                                setTimeout(() => {
+                                    alert("You lost!");
+                                }, 1);
+                            }
+                        } else {
+                            //it's the computer's turn
+                            props.setCurrentPlayer(false);
+                            //the next turn is for the machine
+                            logic(stateCopy);
+                        }
                     }
                 }
+            } else {
+                //if the game is over and the user clicks on a square the game restarts
+                restartGame();
             }
         }
     };
@@ -159,6 +184,8 @@ const Grid = (props) => {
                     let scoreCopy = props.score;
                     scoreCopy[1] = newScore;
                     props.setScore(scoreCopy);
+                    //signal if the result is draw
+                    props.setDraw(true);
                     //notify the user
                     setTimeout(() => {
                         alert("Game over! The result is draw. 🎉");

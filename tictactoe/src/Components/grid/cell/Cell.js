@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import cross from "../../images/cross.svg";
-import circle from "../../images/circle.svg";
+import cross from "../../../images/cross.svg";
+import circle from "../../../images/circle.svg";
 import "./Cell.css";
 
 function Cell(props) {

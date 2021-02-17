@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./App.css";
-import Grid from "./grid/Grid";
-import RestartButton from "./restartButton/RestartButton";
-import Score from './score/Score';
+import Grid from "./Components/grid/Grid";
+import RestartButton from "./Components/Buttons/RestartButton";
+import Score from './Components/score/Score';
+import RestartScoreButton from "./Components/Buttons/RestartScoreButton";
 
 const App = () => {
     const [grid, setGrid] = useState({
@@ -22,6 +23,7 @@ const App = () => {
     const [currentPlayer, setCurrentPlayer] = useState(true); //true is the player, false is the machine
     const [line, setLine] = useState([false]);
     const [score, setScore] = useState([0, 0, 0]);
+    const [draw, setDraw] = useState(false);
     return (
         <div className="App">
             <header className="App-header">
@@ -39,13 +41,17 @@ const App = () => {
                                 setLine={setLine}
                                 score={score}
                                 setScore={setScore}
+                                draw={draw}
+                                setDraw={setDraw}
                             />
                             <RestartButton
                                 setGrid={setGrid}
                                 setLine={setLine}
                                 setCurrentPlayer={setCurrentPlayer}
+                                setDraw={setDraw}
                             />
                             <Score score={score}/>
+                            <RestartScoreButton setScore={setScore}/>
                         </div>
                         <div className="col col-lg-2"></div>
                     </div>
