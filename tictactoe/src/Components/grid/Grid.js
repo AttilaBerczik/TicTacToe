@@ -15,6 +15,8 @@ const Grid = (props) => {
     const [drawModal, showDrawModal] = useState(false);
     const [wrongPlaceModal, showWrongPlaceModal] = useState(false);
     const [wrongTurnModal, showWrongTurnModal] = useState(false);
+    //count number of games, need it to determine who will start
+    const [numberOfGames, setNumberOfGames] = useState(1);
 
     //this is an easily modifiable setting, that changes how much to wait before the modals pop up with the result
     const timeWaitBeforeModal = 200;
@@ -35,6 +37,7 @@ const Grid = (props) => {
         props.setLine([false]);
         props.setCurrentPlayer(true);
         props.setDraw(false);
+        setNumberOfGames(numberOfGames + 1);
     };
 
     const lineVisible = () => {
@@ -69,6 +72,7 @@ const Grid = (props) => {
     const squareClicked = (divID) => {
         //this gets activated when the user clicks a square
         //it makes the cross appear and starts the computer's turn
+
         //if the result is draw and there are no more empty places left, and the user clicks on a square the game restarts
         if (props.draw) {
             restartGame();
@@ -163,7 +167,6 @@ const Grid = (props) => {
                         } else {
                             //it's the computer's turn
                             props.setCurrentPlayer(false);
-                            //the next turn is for the machine
                             logic(stateCopy);
                         }
                     }
@@ -177,12 +180,13 @@ const Grid = (props) => {
 
     const logic = (state) => {
         //these are the calculations for the computer, it randomly puts a circle in an empty square
+
         //check if the game is over
         if (checkIfGameEnds(state) == 0) {
             let gridCopy = { ...state };
-            function getRandomInt(max) {
+            const getRandomInt = (max) => {
                 return Math.floor(Math.random() * Math.floor(max));
-            }
+            };
             let nextTurn = getRandomInt(8);
             const keys = Object.keys(gridCopy);
             const values = Object.values(gridCopy);
@@ -278,12 +282,50 @@ const Grid = (props) => {
                         }, timeWaitBeforeModal);
                     }
                 } else {
-                    //the next turn is for the player
-                    props.setCurrentPlayer(true);
+                    //check if draw
+                    //check if there are empty places left
+                    const values = Object.values(gridCopy);
+                    let numberOfEmptyPlaces = 0;
+                    for (var i = 0; i < values.length; i++) {
+                        if (values[i] == 0) {
+                            numberOfEmptyPlaces = numberOfEmptyPlaces + 1;
+                        }
+                    }
+                    if (numberOfEmptyPlaces < 1) {
+                        //update the score counter
+                        const newScore = props.score[1] + 1;
+                        let scoreCopy = props.score;
+                        scoreCopy[1] = newScore;
+                        props.setScore(scoreCopy);
+                        //signal if the result is draw
+                        props.setDraw(true);
+                        //notify the user
+                        setTimeout(() => {
+                            showDrawModal(true);
+                        }, timeWaitBeforeModal);
+                    } else {
+                        //the next turn is for the player
+                        props.setCurrentPlayer(true);
+                    }
                 }
             }
         }
     };
+
+    if (numberOfGames % 2 != 1) {
+        //check who will start the game
+        //if the number of the game is even number, the player starts
+        const values = Object.values(props.grid);
+        let numberOfEmptyPlaces = 0;
+        for (var i = 0; i < values.length; i++) {
+            if (values[i] == 0) {
+                numberOfEmptyPlaces = numberOfEmptyPlaces + 1;
+            }
+        }
+        if (numberOfEmptyPlaces == 9) {
+            logic(props.grid);
+        }
+    }
 
     return (
         <>

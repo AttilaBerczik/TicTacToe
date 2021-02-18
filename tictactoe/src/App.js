@@ -5,7 +5,6 @@ import RestartButton from "./Components/Buttons/RestartButton";
 import Score from "./Components/score/Score";
 import RestartScoreButton from "./Components/Buttons/RestartScoreButton";
 
-
 const App = () => {
     const [grid, setGrid] = useState({
         //0 is nothing, 1 cross and 2 circle
