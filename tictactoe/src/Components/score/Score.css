@@ -1,3 +1,6 @@
-.score-table td {
+.score-table-line td {
     color: #dee2e6;
+}
+.score-table {
+    margin-bottom: 0.1rem;
 }

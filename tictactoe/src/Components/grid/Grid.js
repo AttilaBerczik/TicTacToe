@@ -190,14 +190,25 @@ const Grid = (props) => {
             let nextTurn = getRandomInt(8);
             const keys = Object.keys(gridCopy);
             const values = Object.values(gridCopy);
-            if (values[nextTurn] != 0) {
-                //check if there are empty places left
-                let numberOfEmptyPlaces = 0;
+            //check if there are empty places left
+            let numberOfEmptyPlaces = 0;
+            for (var i = 0; i < values.length; i++) {
+                if (values[i] == 0) {
+                    numberOfEmptyPlaces = numberOfEmptyPlaces + 1;
+                }
+            }
+            //if there is 1 empty place left we help the computer to locate it, so the program doesn't crash
+            if (numberOfEmptyPlaces == 1) {
+                let indexOfEmptyPlaces;
                 for (var i = 0; i < values.length; i++) {
                     if (values[i] == 0) {
-                        numberOfEmptyPlaces = numberOfEmptyPlaces + 1;
+                        indexOfEmptyPlaces = i;
                     }
                 }
+                nextTurn = indexOfEmptyPlaces;
+            }
+            if (values[nextTurn] != 0) {
+                //if there are no more empty places left we say the result is draw
                 if (numberOfEmptyPlaces < 1) {
                     //update the score counter
                     const newScore = props.score[1] + 1;

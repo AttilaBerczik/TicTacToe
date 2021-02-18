@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Row, Col, Div } from "react-bootstrap";
 import "./App.css";
 import Grid from "./Components/grid/Grid";
 import RestartButton from "./Components/Buttons/RestartButton";
@@ -31,13 +32,19 @@ const App = () => {
                     <div className="row justify-content-center">
                         <div className="col col-lg-2"></div>
                         <div className="col-xl-7">
-                            <p className="h1">Tic-tac-toe</p>
-                            <RestartButton
-                                setGrid={setGrid}
-                                setLine={setLine}
-                                setCurrentPlayer={setCurrentPlayer}
-                                setDraw={setDraw}
-                            />
+                            <Row className="App-header-stuff">
+                                <Col>
+                                    <p className="h1">Tic-tac-toe</p>
+                                </Col>
+                                <Col>
+                                    <RestartButton
+                                        setGrid={setGrid}
+                                        setLine={setLine}
+                                        setCurrentPlayer={setCurrentPlayer}
+                                        setDraw={setDraw}
+                                    />
+                                </Col>
+                            </Row>
                             <Grid
                                 grid={grid}
                                 click={setGrid}
