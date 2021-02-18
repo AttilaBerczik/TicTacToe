@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import "./App.css";
 import Grid from "./Components/grid/Grid";
 import RestartButton from "./Components/Buttons/RestartButton";
-import Score from './Components/score/Score';
+import Score from "./Components/score/Score";
 import RestartScoreButton from "./Components/Buttons/RestartScoreButton";
+
 
 const App = () => {
     const [grid, setGrid] = useState({
@@ -32,6 +33,12 @@ const App = () => {
                         <div className="col col-lg-2"></div>
                         <div className="col-xl-7">
                             <p className="h1">Tic-tac-toe</p>
+                            <RestartButton
+                                setGrid={setGrid}
+                                setLine={setLine}
+                                setCurrentPlayer={setCurrentPlayer}
+                                setDraw={setDraw}
+                            />
                             <Grid
                                 grid={grid}
                                 click={setGrid}
@@ -44,14 +51,8 @@ const App = () => {
                                 draw={draw}
                                 setDraw={setDraw}
                             />
-                            <RestartButton
-                                setGrid={setGrid}
-                                setLine={setLine}
-                                setCurrentPlayer={setCurrentPlayer}
-                                setDraw={setDraw}
-                            />
-                            <Score score={score}/>
-                            <RestartScoreButton setScore={setScore}/>
+                            <Score score={score} />
+                            <RestartScoreButton setScore={setScore} />
                         </div>
                         <div className="col col-lg-2"></div>
                     </div>

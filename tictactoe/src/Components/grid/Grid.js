@@ -1,10 +1,17 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import Cell from "./cell/Cell";
 import "./Grid.css";
 import LineTo from "react-lineto";
 import checkIfGameEnds from "../../logic/CheckIfGameEnds";
+import WinnerModal from "../Modals/WinnerModal";
+import LoserModal from "../Modals/LoserModal";
+import DrawModal from "../Modals/DrawModal";
 
 const Grid = (props) => {
+    const [winnerModal, showWinnerModal] = useState(false);
+    const [loserModal, showLoserModal] = useState(false);
+    const [drawModal, showDrawModal] = useState(false);
+
     const restartGame = () => {
         //function that restarts the whole game, except the scores
         props.click({
@@ -22,6 +29,7 @@ const Grid = (props) => {
         props.setCurrentPlayer(true);
         props.setDraw(false);
     };
+
     const lineVisible = () => {
         //this makes the line visible over the solution, once we've got a solution
         if (props.line[0]) {
@@ -126,9 +134,7 @@ const Grid = (props) => {
                                 scoreCopy[0] = newScore;
                                 props.setScore(scoreCopy);
                                 //notify the user
-                                setTimeout(() => {
-                                    alert("You won!");
-                                }, 1);
+                                showWinnerModal(true);
                             } else if (whoWon == 2) {
                                 drawLine(
                                     checkIfGameEnds(stateCopy)[1],
@@ -140,9 +146,7 @@ const Grid = (props) => {
                                 scoreCopy[2] = newScore;
                                 props.setScore(scoreCopy);
                                 //notify the user
-                                setTimeout(() => {
-                                    alert("You lost!");
-                                }, 1);
+                                showLoserModal(true);
                             }
                         } else {
                             //it's the computer's turn
@@ -187,9 +191,12 @@ const Grid = (props) => {
                     //signal if the result is draw
                     props.setDraw(true);
                     //notify the user
-                    setTimeout(() => {
-                        alert("Game over! The result is draw. 🎉");
-                    }, 1);
+                    console.log("draw");
+                    console.log(loserModal);
+                    console.log(drawModal);
+                    showDrawModal(true);
+                    console.log(loserModal);
+                    console.log(drawModal);
                 } else {
                     logic(gridCopy);
                 }
@@ -242,9 +249,7 @@ const Grid = (props) => {
                         scoreCopy[2] = newScore;
                         props.setScore(scoreCopy);
                         //notify the user
-                        setTimeout(() => {
-                            alert("You won!");
-                        }, 1);
+                        showWinnerModal(true);
                     } else if (whoWon == 2) {
                         props.setLine([
                             true,
@@ -257,9 +262,7 @@ const Grid = (props) => {
                         scoreCopy[2] = newScore;
                         props.setScore(scoreCopy);
                         //notify the user
-                        setTimeout(() => {
-                            alert("You lost!");
-                        }, 1);
+                        showLoserModal(true);
                     }
                 } else {
                     //the next turn is for the player
@@ -319,6 +322,26 @@ const Grid = (props) => {
                 </tbody>
             </table>
             {lineVisible()}
+            <div>
+                <WinnerModal
+                    show={winnerModal}
+                    onHide={() => showWinnerModal(false)}
+                    showWinnerModal={showWinnerModal}
+                    restartGame={restartGame}
+                />
+                <LoserModal
+                    show={loserModal}
+                    onHide={() => showLoserModal(false)}
+                    showLoserModal={showLoserModal}
+                    restartGame={restartGame}
+                />
+                <DrawModal
+                    show={drawModal}
+                    onHide={() => showDrawModal(false)}
+                    showDrawModal={showDrawModal}
+                    restartGame={restartGame}
+                />
+            </div>
         </>
     );
 };
