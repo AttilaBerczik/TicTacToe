@@ -6,11 +6,18 @@ import checkIfGameEnds from "../../logic/CheckIfGameEnds";
 import WinnerModal from "../Modals/WinnerModal";
 import LoserModal from "../Modals/LoserModal";
 import DrawModal from "../Modals/DrawModal";
+import ModiModal from "../Modals/ModiModal";
 
 const Grid = (props) => {
+    //States for modals
     const [winnerModal, showWinnerModal] = useState(false);
     const [loserModal, showLoserModal] = useState(false);
     const [drawModal, showDrawModal] = useState(false);
+    const [wrongPlaceModal, showWrongPlaceModal] = useState(false);
+    const [wrongTurnModal, showWrongTurnModal] = useState(false);
+
+    //this is an easily modifiable setting, that changes how much to wait before the modals pop up with the result
+    const timeWaitBeforeModal = 200;
 
     const restartGame = () => {
         //function that restarts the whole game, except the scores
@@ -70,7 +77,9 @@ const Grid = (props) => {
             if (checkIfGameEnds(props.grid) == 0) {
                 //check if it is the user's turn
                 if (props.currentPlayer == false) {
-                    alert("Sorry, this is not your turn. 😥");
+                    //alert the user that they clicked when it's not their turn
+                    //the computer is very fast, so if this happens, there must be an error
+                    showWrongTurnModal(true);
                 } else {
                     let stateCopy = { ...props.grid };
                     const keys = Object.keys(stateCopy);
@@ -82,9 +91,8 @@ const Grid = (props) => {
                     };
                     //check if the user clicked on an empty square
                     if (searchedValue > 0) {
-                        alert(
-                            "Sorry, there is already something in this place. Please click again. 🤔"
-                        );
+                        //alert the user that they clicked on a wrong place
+                        showWrongPlaceModal(true);
                     } else {
                         //the user is the cross, which is the value 1
                         switch (keys[searchedKey]) {
@@ -134,7 +142,9 @@ const Grid = (props) => {
                                 scoreCopy[0] = newScore;
                                 props.setScore(scoreCopy);
                                 //notify the user
-                                showWinnerModal(true);
+                                setTimeout(() => {
+                                    showWinnerModal(true);
+                                }, timeWaitBeforeModal);
                             } else if (whoWon == 2) {
                                 drawLine(
                                     checkIfGameEnds(stateCopy)[1],
@@ -146,7 +156,9 @@ const Grid = (props) => {
                                 scoreCopy[2] = newScore;
                                 props.setScore(scoreCopy);
                                 //notify the user
-                                showLoserModal(true);
+                                setTimeout(() => {
+                                    showLoserModal(true);
+                                }, timeWaitBeforeModal);
                             }
                         } else {
                             //it's the computer's turn
@@ -191,12 +203,9 @@ const Grid = (props) => {
                     //signal if the result is draw
                     props.setDraw(true);
                     //notify the user
-                    console.log("draw");
-                    console.log(loserModal);
-                    console.log(drawModal);
-                    showDrawModal(true);
-                    console.log(loserModal);
-                    console.log(drawModal);
+                    setTimeout(() => {
+                        showDrawModal(true);
+                    }, timeWaitBeforeModal);
                 } else {
                     logic(gridCopy);
                 }
@@ -249,7 +258,9 @@ const Grid = (props) => {
                         scoreCopy[2] = newScore;
                         props.setScore(scoreCopy);
                         //notify the user
-                        showWinnerModal(true);
+                        setTimeout(() => {
+                            showWinnerModal(true);
+                        }, timeWaitBeforeModal);
                     } else if (whoWon == 2) {
                         props.setLine([
                             true,
@@ -262,7 +273,9 @@ const Grid = (props) => {
                         scoreCopy[2] = newScore;
                         props.setScore(scoreCopy);
                         //notify the user
-                        showLoserModal(true);
+                        setTimeout(() => {
+                            showLoserModal(true);
+                        }, timeWaitBeforeModal);
                     }
                 } else {
                     //the next turn is for the player
@@ -340,6 +353,18 @@ const Grid = (props) => {
                     onHide={() => showDrawModal(false)}
                     showDrawModal={showDrawModal}
                     restartGame={restartGame}
+                />
+                <ModiModal
+                    title={"Sorry, there is already something in this place."}
+                    text={"Please click again elsewhere. 🤔"}
+                    show={wrongPlaceModal}
+                    onHide={() => showWrongPlaceModal(false)}
+                />
+                <ModiModal
+                    title={"Sorry, this is not your turn."}
+                    text={"Please wait a little bit. 😥"}
+                    show={wrongTurnModal}
+                    onHide={() => showWrongTurnModal(false)}
                 />
             </div>
         </>
