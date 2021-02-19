@@ -7,6 +7,8 @@ import WinnerModal from "../Modals/WinnerModal";
 import LoserModal from "../Modals/LoserModal";
 import DrawModal from "../Modals/DrawModal";
 import ModiModal from "../Modals/ModiModal";
+import MediumLogic from "../../logic/MediumLogic";
+import ImpossibleLogic from "../../logic/ImpossibleLogic";
 
 const Grid = (props) => {
     //States for modals
@@ -184,28 +186,40 @@ const Grid = (props) => {
         //check if the game is over
         if (checkIfGameEnds(state) == 0) {
             let gridCopy = { ...state };
-            const getRandomInt = (max) => {
-                return Math.floor(Math.random() * Math.floor(max));
-            };
-            let nextTurn = getRandomInt(8);
+            let nextTurn;
             const keys = Object.keys(gridCopy);
             const values = Object.values(gridCopy);
+            let numberOfEmptyPlaces;
+            if (props.mode == "Easy") {
+                //if the game mode is easy the computer just puts a square randomly somewhere
+                const getRandomInt = (max) => {
+                    return Math.floor(Math.random() * Math.floor(max));
+                };
+                nextTurn = getRandomInt(8);
+                
+                //if there is 1 empty place left we help the computer to locate it, so the program doesn't crash
+                if (numberOfEmptyPlaces == 1) {
+                    let indexOfEmptyPlaces;
+                    for (var i = 0; i < values.length; i++) {
+                        if (values[i] == 0) {
+                            indexOfEmptyPlaces = i;
+                        }
+                    }
+                    nextTurn = indexOfEmptyPlaces;
+                }
+            } else if (props.mode == "Medium") {
+                //if the game mode is medium, the computer puts the squares randomly, but it can detect if you or it has 2 similar in a row and act accordingly
+                nextTurn = MediumLogic(gridCopy);
+            } else if (props.mode == "Impossible") {
+                //if the game mode is impossible and I do it right, it's impossible to win for the player, the only two outcomes are the draw or the computer wins
+                nextTurn = ImpossibleLogic(gridCopy);
+            }
             //check if there are empty places left
-            let numberOfEmptyPlaces = 0;
+            numberOfEmptyPlaces = 0;
             for (var i = 0; i < values.length; i++) {
                 if (values[i] == 0) {
                     numberOfEmptyPlaces = numberOfEmptyPlaces + 1;
                 }
-            }
-            //if there is 1 empty place left we help the computer to locate it, so the program doesn't crash
-            if (numberOfEmptyPlaces == 1) {
-                let indexOfEmptyPlaces;
-                for (var i = 0; i < values.length; i++) {
-                    if (values[i] == 0) {
-                        indexOfEmptyPlaces = i;
-                    }
-                }
-                nextTurn = indexOfEmptyPlaces;
             }
             if (values[nextTurn] != 0) {
                 //if there are no more empty places left we say the result is draw

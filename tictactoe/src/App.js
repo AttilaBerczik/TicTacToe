@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Row, Col, Div } from "react-bootstrap";
+import {
+    Row,
+    Col,
+    Div,
+    DropdownButton,
+    Dropdown,
+    ButtonGroup,
+    Container,
+} from "react-bootstrap";
 import "./App.css";
 import Grid from "./Components/grid/Grid";
 import RestartButton from "./Components/Buttons/RestartButton";
@@ -25,14 +33,15 @@ const App = () => {
     const [line, setLine] = useState([false]);
     const [score, setScore] = useState([0, 0, 0]);
     const [draw, setDraw] = useState(false);
+    const [mode, setMode] = useState("Medium");
     return (
         <div className="App">
             <header className="App-header">
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col col-lg-2"></div>
-                        <div className="col-xl-7">
-                            <Row className="App-header-stuff">
+                <Container fluid>
+                    <Row className="justify-content-center">
+                        <Col lg={4}></Col>
+                        <Col lg={4} xs={9} fluid="md">
+                            <Row className="App-header-stuff justify-content-center">
                                 <Col>
                                     <p className="h1">Tic-tac-toe</p>
                                 </Col>
@@ -45,24 +54,69 @@ const App = () => {
                                     />
                                 </Col>
                             </Row>
-                            <Grid
-                                grid={grid}
-                                click={setGrid}
-                                currentPlayer={currentPlayer}
-                                setCurrentPlayer={setCurrentPlayer}
-                                line={line}
-                                setLine={setLine}
-                                score={score}
-                                setScore={setScore}
-                                draw={draw}
-                                setDraw={setDraw}
-                            />
-                            <Score score={score} />
-                            <RestartScoreButton setScore={setScore} />
-                        </div>
-                        <div className="col col-lg-2"></div>
-                    </div>
-                </div>
+                            <Row>
+                                <Grid
+                                    grid={grid}
+                                    click={setGrid}
+                                    currentPlayer={currentPlayer}
+                                    setCurrentPlayer={setCurrentPlayer}
+                                    line={line}
+                                    setLine={setLine}
+                                    score={score}
+                                    setScore={setScore}
+                                    draw={draw}
+                                    setDraw={setDraw}
+                                    mode={mode}
+                                />
+                            </Row>
+                            <Row>
+                                <Score score={score} />
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <div className="mb-2">
+                                        <DropdownButton
+                                            as={ButtonGroup}
+                                            key={"up"}
+                                            id={"dropdown-button-drop-up"}
+                                            drop={"up"}
+                                            variant="outline-primary"
+                                            title={mode}
+                                            size="lg"
+                                        >
+                                            <Dropdown.Item
+                                                eventKey="1"
+                                                onClick={() => setMode("Easy")}
+                                            >
+                                                Easy
+                                            </Dropdown.Item>
+                                            <Dropdown.Item
+                                                eventKey="2"
+                                                onClick={() =>
+                                                    setMode("Medium")
+                                                }
+                                            >
+                                                Medium
+                                            </Dropdown.Item>
+                                            <Dropdown.Item
+                                                eventKey="3"
+                                                onClick={() =>
+                                                    setMode("Impossible")
+                                                }
+                                            >
+                                                Impossible
+                                            </Dropdown.Item>
+                                        </DropdownButton>
+                                    </div>
+                                </Col>
+                                <Col>
+                                    <RestartScoreButton setScore={setScore} />
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col lg={4}></Col>
+                    </Row>
+                </Container>
             </header>
         </div>
     );
