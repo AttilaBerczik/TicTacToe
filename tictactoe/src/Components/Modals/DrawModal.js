@@ -20,7 +20,7 @@ const DrawModal = (props) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Try again, and beat the comouter next time! 😉</p>
+                <p>Try again, and beat the computer next time! 😉</p>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={restartClicked} variant="success">
