@@ -136,6 +136,20 @@ const ImpossibleLogic = (state, numberOfGames) => {
                     return 2;
                 }
             }
+        } else if (numberOfOccupiedPlaces == 3) {
+            if (values[4] == 2) {
+                //if the opponents plays the impossible to beat strategy, to get a draw we must put into one of the sides, instead of to a corner
+                switch (getRandomInt(4)) {
+                    case 0:
+                        return 1;
+                    case 1:
+                        return 5;
+                    case 2:
+                        return 7;
+                    case 3:
+                        return 3;
+                }
+            }
         }
         if (numberOfOccupiedPlaces == 4) {
             //what happens in the third turn if we start
