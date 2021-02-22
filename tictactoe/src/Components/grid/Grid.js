@@ -212,7 +212,7 @@ const Grid = (props) => {
                 nextTurn = MediumLogic(gridCopy);
             } else if (props.mode == "Impossible") {
                 //if the game mode is impossible and I do it right, it's impossible to win for the player, the only two outcomes are the draw or the computer wins
-                nextTurn = ImpossibleLogic(gridCopy);
+                nextTurn = ImpossibleLogic(gridCopy, numberOfGames);
             }
             //check if there are empty places left
             numberOfEmptyPlaces = 0;
